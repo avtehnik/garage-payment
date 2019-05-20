@@ -1,0 +1,32 @@
+.orgLabel{
+    width: 150px;
+}
+.paymentVal{
+    padding-left: 10px;
+    text-align: right;
+}
+.divFlex{
+    display: flex;
+    flex-wrap: wrap;
+}
+h3 {
+    margin: 10px 0 0;
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+li {
+    display: inline-block;
+    margin: 0 10px;
+}
+a {
+    color: #42b983;
+}
+input{
+    margin: 5px 5px 5px;
+    width: 70px;
+}
+.checkForm{
+    text-align: left;
+}

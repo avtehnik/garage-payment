@@ -1,1 +1,95 @@
-<!DOCTYPE html><html><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><link rel=icon href=favicon.ico><title>my0</title><link as=style href=app.94edd181.css rel=preload><link as=script href=js/app.2955e810.js rel=preload><link as=script href=js/chunk-vendors.62cabe93.js rel=preload><link href=app.94edd181.css rel=stylesheet></head><body><noscript><strong>We're sorry but my0 doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=app></div><script src=js/chunk-vendors.62cabe93.js></script><script src=js/app.2955e810.js></script></body></html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" href="favicon.ico">
+    <title>my0</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link href="app.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="app" class="checkForm">
+    <h3>організація</h3>
+    <input id="input9" class="orgLabel" v-model="orgLabel"/>
+
+    <h3>рахунок від</h3>
+    <input id="input0" v-model="fromDate"/>
+
+    <h3>теперішній місяць</h3>
+    <input id="input1" v-model="currentMounth"/>
+
+    <h3>наступний місяць</h3>
+    <input id="input2" v-model="nextMounth"/>
+
+    <h3>комуналка</h3>
+    <div class="divFlex">
+        <div>
+            <label for="input3">{{nomerRahunku}}</label>
+            <input id="input3" v-model="utilityBill"/>
+        </div>
+        <div>
+            <label for="input4">{{summa}}</label>
+            <input id="input4" type="number"  v-model="utilityBillSumm"/>
+        </div>
+    </div>
+
+    <h3>земля</h3>
+    <div class="divFlex">
+        <div>
+            <label for="input5">{{nomerRahunku}}</label>
+            <input id="input5" v-model="teritoryBill"/>
+        </div>
+        <div>
+            <label for="input6">{{summa}}</label>
+            <input id="input6" type="number"  v-model="teritoryBillSumm"/>
+        </div>
+    </div>
+
+    <h3>оренда</h3>
+    <div class="divFlex">
+        <div>
+            <label for="input7">{{nomerRahunku}}</label>
+            <input id="input7" v-model="rentBill"/>
+        </div>
+        <div>
+            <label for="input8">{{summa}}</label>
+            <input id="input8"  type="number"  v-model="rentBillSumm"/>
+        </div>
+    </div>
+
+
+    <h2>Форма</h2>
+    <table>
+        <tr>
+            <td>Відшкодування комунальних витрат за {{currentMounth}} від {{orgLabel}} рах №сф-{{utilityBill}} від {{fromDate}}</td>
+            <td class="paymentVal">{{utilityBillSumm}}</td>
+        </tr>
+        <tr>
+            <td>Відшкодування витрат за користування земельною ділянкою за {{nextMounth}} від {{orgLabel}} рах №сф-{{teritoryBill}} від {{fromDate}}</td>
+            <td class="paymentVal">{{teritoryBillSumm}}</td>
+        </tr>
+        <tr>
+            <td>Оренда приміщення за {{nextMounth}} від {{orgLabel}} рах №сф-{{rentBill}} від {{fromDate}}</td>
+            <td class="paymentVal">{{rentBillSumm}}</td>
+        </tr>
+    </table>
+
+    <div>
+        <h3>A</h3>
+        <input id="input8"  type="number"  v-model="billa"/>
+    </div>
+    <div>
+        <h3>B</h3>
+        <input id="input8"  type="number"  v-model="billb"/>
+    </div>
+    <div>
+        <h3>C</h3>
+        <input id="input8"  type="number"  v-model="billc"/>
+    </div>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>
