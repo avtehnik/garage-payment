@@ -14,9 +14,11 @@ var app = new Vue({
             teritoryBillSumm: 0,
             rentBill: "",
             rentBillSumm: 0,
+            billSumm: 0,
             billa: 0,
             billb: 0,
             billc: 0,
+            billd: 0,
         }
     },
     methods: {
@@ -37,14 +39,39 @@ var app = new Vue({
         },
         updateBill() {
 
-            var sum =
-                parseFloat(this.utilityBillSumm) +
-                parseFloat(this.teritoryBillSumm) +
-                parseFloat(this.rentBillSumm);
+            var utilityBillSumm = parseFloat(this.utilityBillSumm);
+            var teritoryBillSumm = parseFloat(this.teritoryBillSumm);
+            var rentBillSumm = parseFloat(this.rentBillSumm);
 
+            if (isNaN(utilityBillSumm)) {
+                utilityBillSumm = 0;
+            }
+            if (isNaN(teritoryBillSumm)) {
+                teritoryBillSumm = 0;
+            }
+            if (isNaN(rentBillSumm)) {
+                rentBillSumm = 0;
+            }
+
+
+            if (utilityBillSumm > 0) {
+                utilityBillSumm += 3;
+            }
+            if (teritoryBillSumm > 0) {
+                teritoryBillSumm += 3;
+            }
+            if (rentBillSumm > 0) {
+                rentBillSumm  += 3;
+            }
+
+
+            var sum = utilityBillSumm + teritoryBillSumm + rentBillSumm;
+
+            this.billSumm = sum;
             this.billa = sum * 0.45;
             this.billb = sum * 0.15;
             this.billc = sum * 0.05;
+            this.billd = sum * 0.30;
         }
     },
     mounted() {
