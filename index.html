@@ -35,6 +35,18 @@
         </div>
     </div>
 
+    <h3>Електрика</h3>
+    <div class="divFlex">
+        <div>
+            <label for="input10">{{nomerRahunku}}</label>
+            <input id="input10" v-model="electricityBill"/>
+        </div>
+        <div>
+            <label for="input11">{{summa}}</label>
+            <input id="input11" type="number"  v-model="electricityBillSumm"/> +3грн комісія банку за платіж
+        </div>
+    </div>
+
     <h3>земля</h3>
     <div class="divFlex">
         <div>
@@ -67,6 +79,10 @@
             <td class="paymentVal">{{utilityBillSumm}}</td>
         </tr>
         <tr>
+            <td>Відшкодування комунальних витрат за {{currentMounth}} від {{orgLabel}} рах №сф-{{electricityBill}} від {{fromDate}}</td>
+            <td class="paymentVal">{{electricityBillSumm}}</td>
+        </tr>
+        <tr>
             <td>Відшкодування витрат за користування земельною ділянкою за {{nextMounth}} від {{orgLabel}} рах №сф-{{teritoryBill}} від {{fromDate}}</td>
             <td class="paymentVal">{{teritoryBillSumm}}</td>
         </tr>
@@ -80,12 +96,8 @@
         <h3>Всього: {{billSumm}} </h3>
     </div>
     <div>
-        <h3>A 45</h3>
+        <h3>A 60</h3>
         <input id="input8"  type="number"  v-model="billa"/>
-    </div>
-    <div>
-        <h3>B 15</h3>
-        <input id="input8"  type="number"  v-model="billb"/>
     </div>
     <div>
         <h3>C 5</h3>

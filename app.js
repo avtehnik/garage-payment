@@ -11,12 +11,13 @@ var app = new Vue({
             utilityBill: "",
             utilityBillSumm: 0,
             teritoryBill: "",
-            teritoryBillSumm: 0,
+            teritoryBillSumm: 170,
             rentBill: "",
             rentBillSumm: 0,
+            electricityBill: "",
+            electricityBillSumm: 0,
             billSumm: 0,
             billa: 0,
-            billb: 0,
             billc: 0,
             billd: 0,
         }
@@ -42,6 +43,7 @@ var app = new Vue({
             var utilityBillSumm = parseFloat(this.utilityBillSumm);
             var teritoryBillSumm = parseFloat(this.teritoryBillSumm);
             var rentBillSumm = parseFloat(this.rentBillSumm);
+            var electricityBillSumm = parseFloat(this.electricityBillSumm);
 
             if (isNaN(utilityBillSumm)) {
                 utilityBillSumm = 0;
@@ -51,6 +53,9 @@ var app = new Vue({
             }
             if (isNaN(rentBillSumm)) {
                 rentBillSumm = 0;
+            }
+            if (isNaN(electricityBillSumm)) {
+                electricityBillSumm = 0;
             }
 
 
@@ -63,13 +68,15 @@ var app = new Vue({
             if (rentBillSumm > 0) {
                 rentBillSumm  += 3;
             }
+            if (electricityBillSumm > 0) {
+                electricityBillSumm  += 3;
+            }
 
 
-            var sum = utilityBillSumm + teritoryBillSumm + rentBillSumm;
+            var sum = utilityBillSumm + teritoryBillSumm + rentBillSumm + electricityBillSumm;
 
             this.billSumm = sum;
-            this.billa = sum * 0.45;
-            this.billb = sum * 0.15;
+            this.billa = sum * (0.45 + 0.15);
             this.billc = sum * 0.05;
             this.billd = sum * 0.30;
         }
@@ -80,6 +87,7 @@ var app = new Vue({
         if (localStorage.getItem('utilityBillSumm')) this.utilityBillSumm = JSON.parse(localStorage.getItem('utilityBillSumm'));
         if (localStorage.getItem('teritoryBillSumm')) this.teritoryBillSumm = JSON.parse(localStorage.getItem('teritoryBillSumm'));
         if (localStorage.getItem('rentBillSumm')) this.rentBillSumm = JSON.parse(localStorage.getItem('rentBillSumm'));
+        if (localStorage.getItem('electricityBillSumm')) this.electricityBillSumm = JSON.parse(localStorage.getItem('electricityBillSumm'));
     },
     watch: {
         orgLabel: {
@@ -110,6 +118,14 @@ var app = new Vue({
                 this.updateBill();
                 console.log('rentBillSumm changed!');
                 localStorage.setItem('rentBillSumm', JSON.stringify(this.rentBillSumm));
+            },
+            // deep: true,
+        },
+        electricityBillSumm: {
+            handler() {
+                this.updateBill();
+                console.log('electricityBillSumm changed!');
+                localStorage.setItem('electricityBillSumm', JSON.stringify(this.electricityBillSumm));
             },
             // deep: true,
         },
