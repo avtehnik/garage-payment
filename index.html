@@ -5,109 +5,38 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="icon" href="favicon.ico">
     <title>my0</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="vue.js"></script>
     <link href="app.css" rel="stylesheet">
 </head>
 <body>
 
-<div id="app" class="checkForm">
+    <div id="app" class="checkForm">
     <h3>організація</h3>
-    <input id="input9" class="orgLabel" v-model="orgLabel"/>
+    <input class="orgLabel" v-model="orgLabel"/>
 
     <h3>рахунок від</h3>
-    <input id="input0" v-model="fromDate"/>
+    <input v-model="billDateFrom"/>
 
     <h3>теперішній місяць</h3>
-    <input id="input1" v-model="currentMounth"/>
+    <input v-model="currentMounth"/>
 
     <h3>наступний місяць</h3>
-    <input id="input2" v-model="nextMounth"/>
+    <input v-model="nextMounth"/>
 
-    <h3>комуналка</h3>
-    <div class="divFlex">
-        <div>
-            <label for="input3">{{nomerRahunku}}</label>
-            <input id="input3" v-model="utilityBill"/>
-        </div>
-        <div>
-            <label for="input4">{{summa}}</label>
-            <input id="input4" type="number"  v-model="utilityBillSumm"/> +3грн комісія банку за платіж
-        </div>
-    </div>
-
-    <h3>Електрика</h3>
-    <div class="divFlex">
-        <div>
-            <label for="input10">{{nomerRahunku}}</label>
-            <input id="input10" v-model="electricityBill"/>
-        </div>
-        <div>
-            <label for="input11">{{summa}}</label>
-            <input id="input11" type="number"  v-model="electricityBillSumm"/> +3грн комісія банку за платіж
-        </div>
-    </div>
-
-    <h3>земля</h3>
-    <div class="divFlex">
-        <div>
-            <label for="input5">{{nomerRahunku}}</label>
-            <input id="input5"  v-model="teritoryBill"/>
-        </div>
-        <div>
-            <label for="input6">{{summa}}</label>
-            <input id="input6"  type="number"  v-model="teritoryBillSumm"/> +3грн комісія банку за платіж
-        </div>
-    </div>
-
-    <h3>оренда</h3>
-    <div class="divFlex">
-        <div>
-            <label for="input7">{{nomerRahunku}}</label>
-            <input id="input7" v-model="rentBill"/>
-        </div>
-        <div>
-            <label for="input8">{{summa}}</label>
-            <input id="input8"  type="number"  v-model="rentBillSumm"/> +3грн комісія банку за платіж
-        </div>
-    </div>
-
+    <bill v-for="item in bills" v-bind:item="item"  v-on:change="change" ></bill>
 
     <h2>Форма</h2>
-    <table>
-        <tr>
-            <td>Відшкодування комунальних витрат за {{currentMounth}} від {{orgLabel}} рах №сф-{{utilityBill}} від {{fromDate}}</td>
-            <td class="paymentVal">{{utilityBillSumm}}</td>
-        </tr>
-        <tr>
-            <td>Відшкодування комунальних витрат за {{currentMounth}} від {{orgLabel}} рах №сф-{{electricityBill}} від {{fromDate}}</td>
-            <td class="paymentVal">{{electricityBillSumm}}</td>
-        </tr>
-        <tr>
-            <td>Відшкодування витрат за користування земельною ділянкою за {{nextMounth}} від {{orgLabel}} рах №сф-{{teritoryBill}} від {{fromDate}}</td>
-            <td class="paymentVal">{{teritoryBillSumm}}</td>
-        </tr>
-        <tr>
-            <td>Оренда приміщення за {{nextMounth}} від {{orgLabel}} рах №сф-{{rentBill}} від {{fromDate}}</td>
-            <td class="paymentVal">{{rentBillSumm}}</td>
-        </tr>
+    <table >
+        <print-bill v-for="item in bills" v-bind:item="item" ></print-bill>
     </table>
 
     <div>
         <h3>Всього: {{billSumm}} </h3>
     </div>
-    <div>
-        <h3>A 60</h3>
-        <input id="input8"  type="number"  v-model="billa"/>
-    </div>
-    <div>
-        <h3>C 5</h3>
-        <input id="input8"  type="number"  v-model="billc"/>
-    </div>
-    <div>
-        <h3>D 30</h3>
-        <input id="input8"  type="number"  v-model="billd"/>
-    </div>
-
+        <div v-for="price in prices" >
+            <h3>{{price.title}} {{price.area * 100}}</h3>
+            <input  type="number" v-bind:value="price.price"/>
+        </div>
 </div>
 <script src="app.js"></script>
 </body>

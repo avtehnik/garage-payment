@@ -1,3 +1,44 @@
+Vue.component('bill', {
+    props: ['item'],
+    template: `
+      <div>
+         <h3>{{item.title}}</h3>
+         <div class="divFlex">
+            <div>
+                <label>Рахунок від</label>
+                <input v-model="item.billDateFrom" v-on:change="$emit('change')"/>
+            </div>
+            <div>
+                <label>Рахунок за</label>
+                <input v-model="item.billDate" v-on:change="$emit('change')"/>
+            </div>
+            <div>
+                <label>Номер рахунку</label>
+                <input v-model="item.billNumber" v-on:change="$emit('change')"/>
+            </div>
+            <div>
+                <label>Cума</label>
+                <input  type="number"  v-model="item.price"  v-on:change="$emit('change')"/> +3грн комісія банку за платіж
+            </div>
+            <div>
+                <input type="checkbox" v-model="item.enabled"  v-on:change="$emit('change')"/>
+            </div>
+        </div>
+    </div>
+  `
+})
+
+Vue.component('print-bill', {
+    props: ['item'],
+    template: `
+        <tr>
+            <td>{{item.billText}} за {{item.billDate}} від {{item.fromName}} рах №сф-{{item.billNumber}} від {{item.billDateFrom}}</td>
+            <td class="paymentVal">{{item.price}}</td>
+        </tr>
+  `
+})
+
+
 var app = new Vue({
     el: '#app',
     data() {
@@ -5,7 +46,7 @@ var app = new Vue({
             orgLabel: '',
             nomerRahunku: 'номер рахунку',
             summa: "сума",
-            fromDate: this.getPreviosDate(),
+            billDateFrom: this.getDateFrom(),
             currentMounth: this.getCurrentDate(),
             nextMounth: this.getNextDate(),
             utilityBill: "",
@@ -20,112 +61,185 @@ var app = new Vue({
             billa: 0,
             billc: 0,
             billd: 0,
+            prices: [
+                {
+                    'title': 'A',
+                    'area': 0.65,
+                    'price': 0
+                },
+                {
+                    'title': 'B',
+                    'area': 0.05,
+                    'price': 0
+                },
+                {
+                    'title': 'C',
+                    'area': 0.3,
+                    'price': 0
+                }
+            ],
+            bills: [
+                {
+                    'id': 1,
+                    'title': "Земля",
+                    'fromName': 'Фоп Пітвало В.І.',
+                    'billNumber': 0,
+                    'price': 170,
+                    'billDateFrom': '20.1.2021',
+                    'billDate': '2.2021',
+                    'billDateType': 'before',
+                    'billText': 'Відшкодування витрат за користування земельною ділянкою ',
+                    'enabled': null
+                },
+                {
+                    'id': 2,
+                    'title': "Комуналка",
+                    'fromName': 'Фоп Пітвало В.І.',
+                    'billNumber': 0,
+                    'price': 0,
+                    'billDateFrom': '20.1.2021',
+                    'billDate': '2.2021',
+                    'billDateType': 'after',
+                    'billText': 'Відшкодування комунальних витрат',
+                    'enabled': null
+                },
+                {
+                    'id': 3,
+                    'title': "Електрика",
+                    'fromName': 'Фоп Пітвало В.І.',
+                    'billNumber': 0,
+                    'price': 0,
+                    'billDateFrom': '20.1.2021',
+                    'billDate': '2.2021',
+                    'billDateType': 'after',
+                    'billText': 'Відшкодування комунальних витрат за',
+                    'enabled': null
+                },
+                {
+                    'id': 4,
+                    'title': "Оренда",
+                    'fromName': 'Фоп Пітвало В.І.',
+                    'billNumber': 0,
+                    'price': 3750,
+                    'billDateFrom': '20.1.2021',
+                    'billDate': '2.2021',
+                    'billDateType': 'before',
+                    'billText': 'Оренда приміщення',
+                    'enabled': null
+                }
+            ]
         }
     },
     methods: {
-        getPreviosDate() {
+        change() {
+            this.updateBill();
+        },
+
+        getDateFrom() {
             let currDate = new Date();
-            let strDate = "20" + "." + currDate.getMonth().toString() + '.' + currDate.getFullYear().toString();
-            return strDate;
+            var day = 20;
+            var month = (" 0" + (currDate.getMonth() + 1)).slice(-2);
+            var year = currDate.getFullYear();
+            return [day, month, year].join('.');
         },
         getCurrentDate() {
             let currDate = new Date();
-            let strDate = (currDate.getMonth() + 1).toString() + '.' + currDate.getFullYear().toString();
-            return strDate;
+            var month = (" 0" + (currDate.getMonth() + 1)).slice(-2);
+            var year = currDate.getFullYear();
+            return [month, year].join('.');
         },
         getNextDate() {
-            let currDate = new Date();
-            let strDate = (currDate.getMonth() + 2).toString() + '.' + currDate.getFullYear().toString();
-            return strDate;
+            var now = new Date();
+            if (now.getMonth() == 11) {
+                var current = new Date(now.getFullYear() + 1, 0, 1);
+            } else {
+                var current = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+            }
+
+            var month = (" 0" + (current.getMonth() + 1)).slice(-2);
+            var year = current.getFullYear();
+            return [month, year].join('.');
         },
+
         updateBill() {
+            this.billSumm = 0;
+            this.bills.forEach((bill) => {
+                if (bill.enabled) {
+                    var price = parseFloat(bill.price);
+                    if (!isNaN(price)) {
+                        this.billSumm += price;
+                        if (price) {
+                            this.billSumm += 3;//bank fee
+                        }
+                    }
+                }
+            });
 
-            var utilityBillSumm = parseFloat(this.utilityBillSumm);
-            var teritoryBillSumm = parseFloat(this.teritoryBillSumm);
-            var rentBillSumm = parseFloat(this.rentBillSumm);
-            var electricityBillSumm = parseFloat(this.electricityBillSumm);
+            localStorage.setItem('bills', JSON.stringify(this.bills));
 
-            if (isNaN(utilityBillSumm)) {
-                utilityBillSumm = 0;
-            }
-            if (isNaN(teritoryBillSumm)) {
-                teritoryBillSumm = 0;
-            }
-            if (isNaN(rentBillSumm)) {
-                rentBillSumm = 0;
-            }
-            if (isNaN(electricityBillSumm)) {
-                electricityBillSumm = 0;
-            }
-
-
-            if (utilityBillSumm > 0) {
-                utilityBillSumm += 3;
-            }
-            if (teritoryBillSumm > 0) {
-                teritoryBillSumm += 3;
-            }
-            if (rentBillSumm > 0) {
-                rentBillSumm  += 3;
-            }
-            if (electricityBillSumm > 0) {
-                electricityBillSumm  += 3;
-            }
-
-
-            var sum = utilityBillSumm + teritoryBillSumm + rentBillSumm + electricityBillSumm;
-
-            this.billSumm = sum;
-            this.billa = sum * (0.45 + 0.15);
-            this.billc = sum * 0.05;
-            this.billd = sum * 0.30;
+            this.prices.forEach((price) => {
+                price.price = (this.billSumm * price.area).toFixed(2);
+            });
+        },
+        updateCurrentMonth(){
+            this.bills.forEach((bill) => {
+                if(bill.billDateType === 'after'){
+                    bill.billDate = this.currentMounth;
+                }
+            });
+        },
+        updateNextMonth(){
+            this.bills.forEach((bill) => {
+                console.log(this.nextMounth);
+                if(bill.billDateType === 'before'){
+                    console.log(this.nextMounth);
+                    bill.billDate = this.nextMounth;
+                }
+            });
         }
     },
     mounted() {
+        this.updateBill();
+        this.updateCurrentMonth();
+        this.updateNextMonth();
+    },
+    beforeMount() {
         console.log('App mounted!');
         if (localStorage.getItem('orgLabel')) this.orgLabel = JSON.parse(localStorage.getItem('orgLabel'));
-        if (localStorage.getItem('utilityBillSumm')) this.utilityBillSumm = JSON.parse(localStorage.getItem('utilityBillSumm'));
-        if (localStorage.getItem('teritoryBillSumm')) this.teritoryBillSumm = JSON.parse(localStorage.getItem('teritoryBillSumm'));
-        if (localStorage.getItem('rentBillSumm')) this.rentBillSumm = JSON.parse(localStorage.getItem('rentBillSumm'));
-        if (localStorage.getItem('electricityBillSumm')) this.electricityBillSumm = JSON.parse(localStorage.getItem('electricityBillSumm'));
+        if (localStorage.getItem('bills')) this.bills = JSON.parse(localStorage.getItem('bills'));
+        this.updateBill();
     },
     watch: {
         orgLabel: {
             handler() {
-                console.log('orgLabel changed!');
+                this.bills.forEach((bill) => {
+                    bill.fromName = this.orgLabel;
+                });
                 localStorage.setItem('orgLabel', JSON.stringify(this.orgLabel));
             },
             // deep: true,
         },
-        utilityBillSumm: {
+        nextMounth: {
             handler() {
-                this.updateBill();
-                console.log('utilityBillSumm changed!');
-                localStorage.setItem('utilityBillSumm', JSON.stringify(this.utilityBillSumm));
+                this.updateNextMonth();
             },
             // deep: true,
         },
-        teritoryBillSumm: {
+        currentMounth: {
             handler() {
-                this.updateBill();
-                console.log('teritoryBillSumm changed!');
-                localStorage.setItem('teritoryBillSumm', JSON.stringify(this.teritoryBillSumm));
+                this.bills.forEach((bill) => {
+                    if(bill.billDateType === 'after'){
+                        bill.billDate = this.currentMounth;
+                    }
+                });
             },
             // deep: true,
         },
-        rentBillSumm: {
+        billDateFrom: {
             handler() {
-                this.updateBill();
-                console.log('rentBillSumm changed!');
-                localStorage.setItem('rentBillSumm', JSON.stringify(this.rentBillSumm));
-            },
-            // deep: true,
-        },
-        electricityBillSumm: {
-            handler() {
-                this.updateBill();
-                console.log('electricityBillSumm changed!');
-                localStorage.setItem('electricityBillSumm', JSON.stringify(this.electricityBillSumm));
+                this.bills.forEach((bill) => {
+                    bill.billDateFrom = this.billDateFrom;
+                });
             },
             // deep: true,
         },
